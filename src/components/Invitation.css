@@ -1,0 +1,235 @@
+.invitation-section {
+  width: 100%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-top: 120px; /* Space for navbar + gradient bar */
+  position: relative;
+}
+
+.invitation-section::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #fff8f0;
+  z-index: 1;
+}
+
+.invitation-section::after {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #fff8f0;
+  z-index: 1;
+}
+
+.invitation-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: white;
+}
+
+/* Photo Section */
+.photo-section {
+  width: 100%;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  width: 100%;
+  background: white;
+}
+
+.photo-item {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: white;
+}
+
+.photo-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* Square aspect ratio */
+  overflow: hidden;
+}
+
+.photo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.photo-item:hover .photo {
+  filter: grayscale(0%);
+}
+
+.number-overlay {
+  position: absolute;
+  bottom: 0px;
+  right: 20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 10rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  opacity: 0.85;
+}
+
+/* Text Section */
+.text-section {
+  width: 100%;
+  background: white;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.welcome-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #333;
+  margin: 0 0 1rem 0;
+}
+
+.names-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 5rem;
+  font-weight: 400;
+  color: #cca300;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+}
+
+.venue-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .number-overlay {
+    font-size: 6rem;
+  }
+
+  .names-text {
+    font-size: 4.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .invitation-section {
+    padding: 0;
+    margin-top: 140px;
+  }
+  
+  .invitation-section::before {
+    top: -70px;
+    height: 70px;
+  }
+  
+  .invitation-section::after {
+    bottom: -70px;
+    height: 70px;
+  }
+
+  .photo-grid {
+    gap: 2px;
+  }
+
+  .number-overlay {
+    font-size: 4rem;
+    bottom: 0px;
+    right: 15px;
+  }
+
+  .text-section {
+    padding: 2rem 1.5rem;
+  }
+
+  .welcome-text {
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+  }
+
+  .names-text {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .venue-text {
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .invitation-section {
+    padding: 0;
+    margin-top: 120px;
+  }
+  
+  .invitation-section::before {
+    top: -60px;
+    height: 60px;
+  }
+  
+  .invitation-section::after {
+    bottom: -60px;
+    height: 60px;
+  }
+
+  .photo-grid {
+    gap: 2px;
+  }
+
+  .number-overlay {
+    font-size: 3rem;
+    bottom: 0px;
+    right: 10px;
+  }
+
+  .text-section {
+    padding: 1.5rem 1rem;
+  }
+
+  .welcome-text {
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 1rem;
+  }
+
+  .names-text {
+    font-size: 2.5rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .venue-text {
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+  }
+}
