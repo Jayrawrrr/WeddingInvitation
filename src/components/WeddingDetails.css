@@ -402,6 +402,60 @@
   line-height: 1.6;
 }
 
+/* QR link and modal */
+.qr-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #8B1538;
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+}
+
+.qr-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.qr-modal {
+  position: relative;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.qr-image {
+  max-width: 80vw;
+  max-height: 80vh;
+  height: auto;
+  width: auto;
+  display: block;
+}
+
+.qr-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #8B1538;
+  color: #fff;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 32px;
+}
+
 /* Dress Code Palette */
 .palette-row {
   display: flex;

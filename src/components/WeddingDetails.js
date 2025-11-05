@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   FaCalendarAlt, 
@@ -18,6 +18,7 @@ import {
 import './WeddingDetails.css';
 
 const WeddingDetails = () => {
+  const [showQRModal, setShowQRModal] = useState(false);
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -93,7 +94,12 @@ const WeddingDetails = () => {
       icon: <FaGift />,
       title: "In lieu of gifts",
       content: "Your presence at our wedding is the only gift we truly require.",
-      subtitle: "For those who insist on offering more, a fund towards our ongoing journey and future plans would be warmly accepted."
+      subtitle: (
+        <>
+          For those who insist on offering more, a fund towards our ongoing journey and future plans would be warmly accepted.{' '}
+          <button type="button" className="qr-link" onClick={() => setShowQRModal(true)}><em>Click here for the QR</em></button>
+        </>
+      )
     },
     {
       icon: <FaCar />,
@@ -234,6 +240,14 @@ const WeddingDetails = () => {
             </div>
           </motion.div>
         </motion.div>
+        {showQRModal && (
+          <div className="qr-modal-overlay" onClick={() => setShowQRModal(false)}>
+            <div className="qr-modal" onClick={(e) => e.stopPropagation()}>
+              <button type="button" className="qr-close" onClick={() => setShowQRModal(false)}>×</button>
+              <img src="/QR.jpg" alt="QR Code" className="qr-image" />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
