@@ -38,32 +38,39 @@ const WeddingDetails = () => {
 
   const timeline = [
     {
-      time: "3:00 PM",
-      event: "Ceremony",
-      location: "Garden Pavilion",
-      description: "Join us as we say 'I do' in our beautiful garden ceremony",
+      time: "4:00 PM",
+      event: "Wedding Ceremony",
+      location: "Garden Area",
+      description: "Join us as we say 'I do'",
       icon: <FaRing />
     },
     {
-      time: "4:00 PM",
-      event: "Cocktail Hour",
-      location: "Rose Garden",
-      description: "Enjoy drinks and appetizers while we take photos",
+      time: "5:00 PM",
+      event: "Cocktail Hour & Photos",
+      location: "Garden & Main House Area",
+      description: "Enjoy drinks and mingle while photos are taken",
       icon: <FaGlassCheers />
     },
     {
-      time: "5:30 PM",
-      event: "Reception",
-      location: "Grand Ballroom",
-      description: "Dinner, dancing, and celebration",
+      time: "6:00 PM",
+      event: "Grand Entrance, First Dance & Speeches",
+      location: "Tent Area",
+      description: "Welcome the couple, first dance, and heartfelt words",
       icon: <FaMusic />
     },
     {
-      time: "11:00 PM",
-      event: "Send-off",
+      time: "7:00 PM",
+      event: "Buffet Dinner",
+      location: "Tent Area",
+      description: "Dinner is served",
+      icon: <FaUtensils />
+    },
+    {
+      time: "9:00 PM",
+      event: "Send Off",
       location: "Main Entrance",
-      description: "Sparkler send-off to end our magical day",
-      icon: <FaStar />
+      description: "Help us send off the newlyweds!",
+      icon: <FaCar />
     }
   ];
 
@@ -71,26 +78,27 @@ const WeddingDetails = () => {
     {
       icon: <FaMapMarkerAlt />,
       title: "Venue",
-      content: "Garden Manor Estate",
-      subtitle: "123 Garden Way, Napa Valley, CA 94558"
+      content: "Savanna Farm Tagaytay",
+      subtitle: "007 Barangay, Alfonso, Tagaytay"
     },
     {
       icon: <FaUtensils />,
       title: "Dress Code",
-      content: "Cocktail Attire",
-      subtitle: "Semi-formal with garden party vibes"
+      content: "Formal and Semi Formal",
+      subtitle: "Kindly choose from our palette below.",
+      palette: ["#EFD4CB", "#DEA297", "#908556", "#947963", "#44352A"]
     },
     {
       icon: <FaGift />,
-      title: "Registry",
-      content: "Amazon & Bed Bath & Beyond",
-      subtitle: "Your presence is the greatest gift, but if you'd like to give something, we're registered at..."
+      title: "In lieu of gifts",
+      content: "Your presence at our wedding is the only gift we truly require.",
+      subtitle: "For those who insist on offering more, a fund towards our ongoing journey and future plans would be warmly accepted."
     },
     {
       icon: <FaCar />,
       title: "Parking",
-      content: "Complimentary Valet",
-      subtitle: "Free valet parking available at the main entrance"
+      content: "Free on-site parking",
+      subtitle: "Available for all guests"
     }
   ];
 
@@ -117,26 +125,26 @@ const WeddingDetails = () => {
                 {/* Date */}
                 <div>
                   <FaCalendarAlt className="info-icon-main" />
-                  <div className="date-number">15</div>
-                  <div className="date-text">June 2024</div>
+                  <div className="date-number">7</div>
+                  <div className="date-text">February 2026</div>
                   <div className="date-subtext">Saturday</div>
                 </div>
 
                 {/* Time */}
                 <div>
                   <FaClock className="info-icon-main" />
-                  <div className="time-main">3:00 PM</div>
+                  <div className="time-main">4:00 PM</div>
                   <div className="time-secondary">Ceremony</div>
-                  <div className="time-to">to 11:00 PM</div>
-                  <div className="time-secondary">Reception</div>
+                  <div className="time-to">to 9:00 PM</div>
+                  <div className="time-secondary">Send Off</div>
                 </div>
 
                 {/* Location */}
                 <div>
                   <FaMapMarkerAlt className="info-icon-main" />
-                  <div className="location-main">Garden Manor</div>
-                  <div className="location-main">Estate</div>
-                  <div className="location-subtext">Napa Valley, CA</div>
+                  <div className="location-main">Savanna Farm</div>
+                  <div className="location-main">Tagaytay</div>
+                  <div className="location-subtext">007 Barangay, Alfonso, Tagaytay</div>
                 </div>
               </div>
             </div>
@@ -185,6 +193,18 @@ const WeddingDetails = () => {
                     <h4 className="detail-title-elegant">{detail.title}</h4>
                     <p className="detail-main-elegant">{detail.content}</p>
                     <p className="detail-sub-elegant">{detail.subtitle}</p>
+                    {detail.palette && (
+                      <div className="palette-row">
+                        {detail.palette.map((hex, i) => (
+                          <span
+                            key={i}
+                            className="palette-swatch"
+                            style={{ backgroundColor: hex }}
+                            title={hex}
+                          />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))}
@@ -203,23 +223,11 @@ const WeddingDetails = () => {
               <div className="notes-content">
                 <div className="note-item">
                   <div className="note-bullet">•</div>
-                  <p>Weather permitting, the ceremony will be held outdoors in our beautiful garden</p>
+                  <p>Refrain from wearing jeans, shorts and any white attire.</p>
                 </div>
                 <div className="note-item">
                   <div className="note-bullet">•</div>
-                  <p>We'll have a backup indoor ceremony space in case of rain</p>
-                </div>
-                <div className="note-item">
-                  <div className="note-bullet">•</div>
-                  <p>Please let us know of any dietary restrictions when you RSVP</p>
-                </div>
-                <div className="note-item">
-                  <div className="note-bullet">•</div>
-                  <p>Children are welcome! We'll have a kids' table with activities</p>
-                </div>
-                <div className="note-item">
-                  <div className="note-bullet">•</div>
-                  <p>Don't forget to bring your dancing shoes!</p>
+                  <p>We would love for you to join us in wearing colors from our palette.</p>
                 </div>
               </div>
             </div>

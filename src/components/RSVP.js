@@ -110,7 +110,7 @@ const RSVP = () => {
         >
           <motion.div className="rsvp-header" variants={itemVariants}>
             <h1 className="section-title">RSVP</h1>
-            <p className="section-subtitle">Please respond by May 15, 2024</p>
+            <p className="section-subtitle">Please respond by January 7, 2026</p>
           </motion.div>
 
           <motion.div className="rsvp-form-container" variants={itemVariants}>
@@ -288,8 +288,8 @@ const RSVP = () => {
               <h3>Need Help?</h3>
               <p>If you have any questions about the wedding or need to make changes to your RSVP, please contact us:</p>
               <div className="contact-info">
-                <p><strong>Keziah:</strong> keziah@email.com | (555) 123-4567</p>
-                <p><strong>Darwin:</strong> darwin@email.com | (555) 987-6543</p>
+                <p><strong>Keziah:</strong> keziah.mecate@gmail.com | 09159810479</p>
+                <p><strong>Darwin:</strong> cyatxi.dm@gmail.com</p>
               </div>
             </div>
           </motion.div>
