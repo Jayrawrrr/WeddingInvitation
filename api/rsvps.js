@@ -49,7 +49,7 @@ module.exports = async function handler(req, res) {
     const notAttendingCount = rsvps.filter(r => r.attending === 'no').length;
     const totalGuests = rsvps
       .filter(r => r.attending === 'yes')
-      .reduce((sum, r) => sum + (r.guestCount || 0), 0);
+      .reduce((sum, r) => sum + (r.guestCount ? Number(r.guestCount) : 0), 0);
 
     return res.status(200).json({
       success: true,

@@ -21,12 +21,27 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 module.exports = async function handler(req, res) {
-  // Only allow POST requests
-  if (req.method !== 'POST') {
+  // Support POST (create) and DELETE (remove)
+  if (req.method !== 'POST' && req.method !== 'DELETE') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
+    // DELETE: remove RSVP by id (admin only)
+    if (req.method === 'DELETE') {
+      const authHeader = req.headers.authorization;
+      if (authHeader !== 'Bearer authenticated') {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+      const id = req.query?.id || req.body?.id;
+      if (!id) {
+        return res.status(400).json({ error: 'Missing RSVP id' });
+      }
+      await db.collection('rsvps').doc(id).delete();
+      return res.status(200).json({ success: true, message: 'RSVP deleted', id });
+    }
+
+    // POST: create RSVP
     const {
       name,
       email,
@@ -48,7 +63,7 @@ module.exports = async function handler(req, res) {
       email,
       phone: phone || '',
       attending,
-      guestCount: attending === 'yes' ? guestCount : 0,
+      guestCount: attending === 'yes' ? (Number(guestCount) || 0) : 0,
       dietaryRestrictions: dietaryRestrictions || '',
       message: message || '',
       submittedAt: admin.firestore.FieldValue.serverTimestamp()

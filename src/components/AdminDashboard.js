@@ -52,6 +52,30 @@ const AdminDashboard = () => {
     navigate('/kd020726');
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Delete this RSVP?')) return;
+    try {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(`/api/rsvp?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setRsvps(prev => prev.filter(r => r.id !== id));
+        // optionally update counts
+        fetchRSVPs();
+      } else {
+        alert(data.error || 'Failed to delete RSVP');
+      }
+    } catch (err) {
+      console.error('Delete error:', err);
+      alert('Failed to delete RSVP');
+    }
+  };
+
   const formatDate = (timestamp) => {
     if (!timestamp) return 'N/A';
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
@@ -166,9 +190,14 @@ const AdminDashboard = () => {
                     <h3>{rsvp.name}</h3>
                     <p>{formatDate(rsvp.submittedAt)}</p>
                   </div>
-                  <span className={`status-badge ${rsvp.attending}`}>
-                    {rsvp.attending === 'yes' ? 'Attending' : 'Not Attending'}
-                  </span>
+                  <div className="rsvp-actions">
+                    <span className={`status-badge ${rsvp.attending}`}>
+                      {rsvp.attending === 'yes' ? 'Attending' : 'Not Attending'}
+                    </span>
+                    <button className="delete-button" onClick={() => handleDelete(rsvp.id)}>
+                      Remove
+                    </button>
+                  </div>
                 </div>
 
                 <div className="rsvp-details">
