@@ -12,7 +12,8 @@ import {
   FaHeart,
   FaRing,
   FaGlassCheers,
-  FaStar
+  FaStar,
+  FaTshirt
 } from 'react-icons/fa';
 import './WeddingDetails.css';
 
@@ -82,7 +83,7 @@ const WeddingDetails = () => {
       subtitle: "007 Barangay, Alfonso, Tagaytay"
     },
     {
-      icon: <FaUtensils />,
+      icon: <FaTshirt />,
       title: "Dress Code",
       content: "Formal and Semi Formal",
       subtitle: "Kindly choose from our palette below.",
