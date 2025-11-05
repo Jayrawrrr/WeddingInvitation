@@ -46,7 +46,7 @@ const Invitation = () => {
             {/* Photo 1 with "02" */}
             <motion.div className="photo-item" variants={itemVariants}>
               <div className="photo-wrapper">
-                <img src="/kd1.jpg" alt="Keziah & Darwin" className="photo" />
+                <img src="/kd1.JPG" alt="Keziah & Darwin" className="photo" />
                 <motion.span 
                   className="number-overlay"
                   variants={numberVariants}

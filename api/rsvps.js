@@ -1,7 +1,7 @@
 // Vercel Serverless Function for fetching RSVPs
 // Protected endpoint - requires authentication
 
-import admin from 'firebase-admin';
+const admin = require('firebase-admin');
 
 // Initialize Firebase Admin
 if (!admin.apps.length) {
@@ -20,7 +20,7 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // Only allow GET requests
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });

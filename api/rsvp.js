@@ -1,7 +1,7 @@
 // Vercel Serverless Function for RSVP submissions
 // This handles RSVP form submissions and saves to Firebase
 
-import admin from 'firebase-admin';
+const admin = require('firebase-admin');
 
 // Initialize Firebase Admin (credentials will be added via environment variables)
 if (!admin.apps.length) {
@@ -20,7 +20,7 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
