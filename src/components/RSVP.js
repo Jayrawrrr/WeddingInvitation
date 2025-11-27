@@ -264,7 +264,7 @@ const RSVP = () => {
                         Age of Each Guest *
                       </label>
                       <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
-                        Please provide the age of each guest (including yourself) for payment calculation
+                        Please provide the age of each guest (including yourself)
                       </p>
                       {Array.from({ length: formData.guestCount }, (_, index) => (
                         <motion.div 
