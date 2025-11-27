@@ -211,9 +211,14 @@ const AdminDashboard = () => {
                       <FaPhone /> {rsvp.phone}
                     </div>
                   )}
-                  {rsvp.attending === 'yes' && rsvp.guestCount > 1 && (
+                  {rsvp.attending === 'yes' && (
                     <div className="detail-item">
-                      <FaUsers /> {rsvp.guestCount} Guests
+                      <FaUsers /> {rsvp.guestCount || 1} {rsvp.guestCount === 1 ? 'Guest' : 'Guests'}
+                      {rsvp.guestAges && rsvp.guestAges.length > 0 && (
+                        <span style={{ marginLeft: '0.5rem', color: '#666', fontSize: '0.9rem' }}>
+                          (Ages: {rsvp.guestAges.filter(age => age > 0).join(', ')})
+                        </span>
+                      )}
                     </div>
                   )}
                   {rsvp.dietaryRestrictions && (

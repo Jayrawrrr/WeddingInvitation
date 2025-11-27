@@ -10,6 +10,7 @@ const RSVP = () => {
     phone: '',
     attending: '',
     guestCount: 1,
+    guestAges: [''], // Array to store age for each guest
     dietaryRestrictions: '',
     message: ''
   });
@@ -18,10 +19,33 @@ const RSVP = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // Handle guestCount change - update guestAges array
+    if (name === 'guestCount') {
+      const count = parseInt(value) || 1;
+      setFormData(prev => ({
+        ...prev,
+        guestCount: count,
+        guestAges: Array(count).fill('').map((_, index) => prev.guestAges[index] || '')
+      }));
+      return;
+    }
+    
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleAgeChange = (index, value) => {
+    setFormData(prev => {
+      const newAges = [...prev.guestAges];
+      newAges[index] = value;
+      return {
+        ...prev,
+        guestAges: newAges
+      };
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -201,30 +225,76 @@ const RSVP = () => {
 
               {/* Guest Count */}
               {formData.attending === 'yes' && (
-                <motion.div 
-                  className="form-group" 
-                  variants={itemVariants}
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                >
-                  <label htmlFor="guestCount" className="form-label">
-                    Number of Guests
-                  </label>
-                  <select
-                    id="guestCount"
-                    name="guestCount"
-                    value={formData.guestCount}
-                    onChange={handleInputChange}
-                    className="form-select"
+                <>
+                  <motion.div 
+                    className="form-group" 
+                    variants={itemVariants}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
                   >
-                    {[1, 2, 3, 4, 5].map(num => (
-                      <option key={num} value={num}>
-                        {num} {num === 1 ? 'Guest' : 'Guests'}
-                      </option>
-                    ))}
-                  </select>
-                </motion.div>
+                    <label htmlFor="guestCount" className="form-label">
+                      Number of Guests
+                    </label>
+                    <select
+                      id="guestCount"
+                      name="guestCount"
+                      value={formData.guestCount}
+                      onChange={handleInputChange}
+                      className="form-select"
+                    >
+                      {[1, 2, 3, 4, 5].map(num => (
+                        <option key={num} value={num}>
+                          {num} {num === 1 ? 'Guest' : 'Guests'}
+                        </option>
+                      ))}
+                    </select>
+                  </motion.div>
+
+                  {/* Guest Ages */}
+                  {formData.guestCount > 0 && (
+                    <motion.div 
+                      className="form-group" 
+                      variants={itemVariants}
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                    >
+                      <label className="form-label">
+                        Age of Each Guest *
+                      </label>
+                      <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
+                        Please provide the age of each guest (including yourself) for payment calculation
+                      </p>
+                      {Array.from({ length: formData.guestCount }, (_, index) => (
+                        <motion.div 
+                          key={index}
+                          className="form-group"
+                          style={{ marginBottom: '1rem' }}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                        >
+                          <label htmlFor={`age-${index}`} className="form-label" style={{ fontSize: '0.95rem' }}>
+                            Guest {index + 1} Age
+                          </label>
+                          <input
+                            type="number"
+                            id={`age-${index}`}
+                            min="0"
+                            max="120"
+                            value={formData.guestAges[index] || ''}
+                            onChange={(e) => handleAgeChange(index, e.target.value)}
+                            className="form-input"
+                            required={formData.attending === 'yes'}
+                            placeholder="Enter age"
+                            style={{ maxWidth: '200px' }}
+                          />
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  )}
+                </>
               )}
 
               {/* Dietary Restrictions */}

@@ -48,6 +48,7 @@ module.exports = async function handler(req, res) {
       phone,
       attending,
       guestCount,
+      guestAges,
       dietaryRestrictions,
       message
     } = req.body;
@@ -64,6 +65,7 @@ module.exports = async function handler(req, res) {
       phone: phone || '',
       attending,
       guestCount: attending === 'yes' ? (Number(guestCount) || 0) : 0,
+      guestAges: attending === 'yes' && guestAges ? guestAges.map(age => Number(age) || 0) : [],
       dietaryRestrictions: dietaryRestrictions || '',
       message: message || '',
       submittedAt: admin.firestore.FieldValue.serverTimestamp()
