@@ -265,6 +265,17 @@
   font-size: 0.95rem;
 }
 
+.detail-item.guest-breakdown {
+  align-items: flex-start;
+}
+
+.guest-breakdown-list {
+  margin: 0.25rem 0 0;
+  padding-left: 1.2rem;
+  color: #444;
+  font-size: 0.9rem;
+}
+
 .detail-item svg {
   color: #8B1538;
   flex-shrink: 0;

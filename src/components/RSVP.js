@@ -10,7 +10,8 @@ const RSVP = () => {
     phone: '',
     attending: '',
     guestCount: 1,
-    guestAges: [''], // Array to store age for each guest
+    primaryGuestAge: '',
+    additionalGuests: [],
     dietaryRestrictions: '',
     message: ''
   });
@@ -19,45 +20,84 @@ const RSVP = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
-    // Handle guestCount change - update guestAges array
+
     if (name === 'guestCount') {
-      const count = parseInt(value) || 1;
-      setFormData(prev => ({
-        ...prev,
-        guestCount: count,
-        guestAges: Array(count).fill('').map((_, index) => prev.guestAges[index] || '')
-      }));
+      const count = Math.min(10, Math.max(1, parseInt(value, 10) || 1));
+      setFormData(prev => {
+        const additionalCount = Math.max(count - 1, 0);
+        const updatedAdditionalGuests = Array.from({ length: additionalCount }, (_, index) => ({
+          name: prev.additionalGuests[index]?.name || '',
+          age: prev.additionalGuests[index]?.age || ''
+        }));
+
+        return {
+          ...prev,
+          guestCount: count,
+          additionalGuests: updatedAdditionalGuests
+        };
+      });
       return;
     }
-    
+
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
   };
 
-  const handleAgeChange = (index, value) => {
+  const handlePrimaryAgeChange = (value) => {
+    setFormData(prev => ({
+      ...prev,
+      primaryGuestAge: value
+    }));
+  };
+
+  const handleAdditionalGuestChange = (index, field, value) => {
     setFormData(prev => {
-      const newAges = [...prev.guestAges];
-      newAges[index] = value;
+      const updated = [...prev.additionalGuests];
+      updated[index] = {
+        ...(updated[index] || {}),
+        [field]: value
+      };
+
       return {
         ...prev,
-        guestAges: newAges
+        additionalGuests: updated
       };
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    const guestDetails = formData.attending === 'yes'
+      ? [
+          {
+            label: 'Guest 1',
+            name: formData.name.trim(),
+            age: Number(formData.primaryGuestAge) || 0
+          },
+          ...formData.additionalGuests.map((guest, index) => ({
+            label: `Guest ${index + 2}`,
+            name: guest.name?.trim() || `Guest ${index + 2}`,
+            age: Number(guest.age) || 0
+          }))
+        ]
+      : [];
+
+    const payload = {
+      ...formData,
+      guestCount: formData.attending === 'yes' ? formData.guestCount : 0,
+      guestDetails
+    };
+
     try {
       const response = await fetch('/api/rsvp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -223,7 +263,7 @@ const RSVP = () => {
                 </div>
               </motion.div>
 
-              {/* Guest Count */}
+              {/* Guest Count & Details */}
               {formData.attending === 'yes' && (
                 <>
                   <motion.div 
@@ -243,7 +283,7 @@ const RSVP = () => {
                       onChange={handleInputChange}
                       className="form-select"
                     >
-                      {[1, 2, 3, 4, 5].map(num => (
+                      {Array.from({ length: 10 }, (_, index) => index + 1).map(num => (
                         <option key={num} value={num}>
                           {num} {num === 1 ? 'Guest' : 'Guests'}
                         </option>
@@ -251,8 +291,34 @@ const RSVP = () => {
                     </select>
                   </motion.div>
 
-                  {/* Guest Ages */}
-                  {formData.guestCount > 0 && (
+                  <motion.div 
+                    className="form-group" 
+                    variants={itemVariants}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                  >
+                    <label htmlFor="primaryGuestAge" className="form-label">
+                      Your Age *
+                    </label>
+                    <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
+                      Guest 1 is the person filling out this form. Please provide your age.
+                    </p>
+                    <input
+                      type="number"
+                      id="primaryGuestAge"
+                      min="0"
+                      max="120"
+                      value={formData.primaryGuestAge}
+                      onChange={(e) => handlePrimaryAgeChange(e.target.value)}
+                      className="form-input"
+                      required
+                      placeholder="Enter your age"
+                      style={{ maxWidth: '200px' }}
+                    />
+                  </motion.div>
+
+                  {formData.additionalGuests.length > 0 && (
                     <motion.div 
                       className="form-group" 
                       variants={itemVariants}
@@ -261,35 +327,48 @@ const RSVP = () => {
                       exit={{ opacity: 0, height: 0 }}
                     >
                       <label className="form-label">
-                        Age of Each Guest *
+                        Additional Guest Details *
                       </label>
                       <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
-                        Please provide the age of each guest (including yourself)
+                        Please provide the name and age for each additional guest (Guests 2-10)
                       </p>
-                      {Array.from({ length: formData.guestCount }, (_, index) => (
+                      {formData.additionalGuests.map((guest, index) => (
                         <motion.div 
-                          key={index}
-                          className="form-group"
-                          style={{ marginBottom: '1rem' }}
+                          key={`guest-${index + 2}`}
+                          className="additional-guest-row"
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 }}
+                          transition={{ delay: index * 0.05 }}
                         >
-                          <label htmlFor={`age-${index}`} className="form-label" style={{ fontSize: '0.95rem' }}>
-                            Guest {index + 1} Age
-                          </label>
-                          <input
-                            type="number"
-                            id={`age-${index}`}
-                            min="0"
-                            max="120"
-                            value={formData.guestAges[index] || ''}
-                            onChange={(e) => handleAgeChange(index, e.target.value)}
-                            className="form-input"
-                            required={formData.attending === 'yes'}
-                            placeholder="Enter age"
-                            style={{ maxWidth: '200px' }}
-                          />
+                          <div className="form-group" style={{ marginBottom: '0.5rem' }}>
+                            <label className="form-label" style={{ fontSize: '0.95rem' }}>
+                              Guest {index + 2} Name *
+                            </label>
+                            <input
+                              type="text"
+                              value={guest.name}
+                              onChange={(e) => handleAdditionalGuestChange(index, 'name', e.target.value)}
+                              className="form-input"
+                              placeholder={`Enter Guest ${index + 2} name`}
+                              required
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label" style={{ fontSize: '0.95rem' }}>
+                              Guest {index + 2} Age *
+                            </label>
+                            <input
+                              type="number"
+                              min="0"
+                              max="120"
+                              value={guest.age}
+                              onChange={(e) => handleAdditionalGuestChange(index, 'age', e.target.value)}
+                              className="form-input"
+                              placeholder="Enter age"
+                              required
+                              style={{ maxWidth: '200px' }}
+                            />
+                          </div>
                         </motion.div>
                       ))}
                     </motion.div>

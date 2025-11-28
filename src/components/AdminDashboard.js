@@ -214,11 +214,22 @@ const AdminDashboard = () => {
                   {rsvp.attending === 'yes' && (
                     <div className="detail-item">
                       <FaUsers /> {rsvp.guestCount || 1} {rsvp.guestCount === 1 ? 'Guest' : 'Guests'}
-                      {rsvp.guestAges && rsvp.guestAges.length > 0 && (
-                        <span style={{ marginLeft: '0.5rem', color: '#666', fontSize: '0.9rem' }}>
-                          (Ages: {rsvp.guestAges.filter(age => age > 0).join(', ')})
-                        </span>
-                      )}
+                    </div>
+                  )}
+                  {rsvp.attending === 'yes' && rsvp.guestDetails && rsvp.guestDetails.length > 0 && (
+                    <div className="detail-item guest-breakdown">
+                      <FaUser />
+                      <div>
+                        <strong>Guest Details</strong>
+                        <ul className="guest-breakdown-list">
+                          {rsvp.guestDetails.map((guest, guestIndex) => (
+                            <li key={`${rsvp.id}-guest-${guestIndex}`}>
+                              {guest.label || `Guest ${guestIndex + 1}`}: {guest.name || 'N/A'}
+                              {typeof guest.age === 'number' && guest.age > 0 ? ` (${guest.age} yrs)` : ''}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   )}
                   {rsvp.dietaryRestrictions && (

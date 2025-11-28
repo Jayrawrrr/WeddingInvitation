@@ -48,7 +48,9 @@ module.exports = async function handler(req, res) {
       phone,
       attending,
       guestCount,
-      guestAges,
+      guestDetails,
+      primaryGuestAge,
+      additionalGuests,
       dietaryRestrictions,
       message
     } = req.body;
@@ -58,14 +60,50 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    const normalizedGuestCount = attending === 'yes'
+      ? Math.min(10, Math.max(1, Number(guestCount) || 1))
+      : 0;
+
+    let normalizedGuestDetails = [];
+
+    if (attending === 'yes') {
+      if (Array.isArray(guestDetails) && guestDetails.length > 0) {
+        normalizedGuestDetails = guestDetails
+          .slice(0, normalizedGuestCount)
+          .map((guest, index) => ({
+            label: guest?.label || `Guest ${index + 1}`,
+            name: guest?.name || '',
+            age: typeof guest?.age === 'number' ? guest.age : Number(guest?.age) || 0,
+            isPrimary: index === 0
+          }));
+      } else {
+        const fallbackDetails = [
+          {
+            label: 'Guest 1',
+            name,
+            age: Number(primaryGuestAge) || 0,
+            isPrimary: true
+          },
+          ...(Array.isArray(additionalGuests) ? additionalGuests : []).map((guest, index) => ({
+            label: `Guest ${index + 2}`,
+            name: guest?.name || '',
+            age: Number(guest?.age) || 0,
+            isPrimary: false
+          }))
+        ];
+
+        normalizedGuestDetails = fallbackDetails.slice(0, normalizedGuestCount);
+      }
+    }
+
     // Create RSVP data object
     const rsvpData = {
       name,
       email,
       phone: phone || '',
       attending,
-      guestCount: attending === 'yes' ? (Number(guestCount) || 0) : 0,
-      guestAges: attending === 'yes' && guestAges ? guestAges.map(age => Number(age) || 0) : [],
+      guestCount: normalizedGuestCount,
+      guestDetails: normalizedGuestDetails,
       dietaryRestrictions: dietaryRestrictions || '',
       message: message || '',
       submittedAt: admin.firestore.FieldValue.serverTimestamp()
